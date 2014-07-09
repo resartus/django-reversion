@@ -188,5 +188,5 @@ class Version(models.Model):
 
 
 # Version management signals.
-pre_revision_commit = Signal(providing_args=["instances", "revision", "versions"])
-post_revision_commit = Signal(providing_args=["instances", "revision", "versions"])
+pre_revision_commit = Signal(providing_args=["instances", "revision", "versions", "user", "role"])
+post_revision_commit = Signal(providing_args=["instances", "revision", "versions", "user", "role"])

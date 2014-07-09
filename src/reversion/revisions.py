@@ -177,6 +177,7 @@ class RevisionContextManager(local):
                             ),
                             user = self._user,
                             comment = self._comment,
+                            role = self._role,
                             meta = self._meta,
                             ignore_duplicates = self._ignore_duplicates,
                             db = self._db,
@@ -220,6 +221,15 @@ class RevisionContextManager(local):
         """Gets the current user for the revision."""
         self._assert_active()
         return self._user
+
+    def set_role(self, role):
+        self._assert_active()
+        self._role = role
+
+    def get_role(self):
+        """Gets the current user for the revision."""
+        self._assert_active()
+        return self._role
         
     def set_comment(self, comment):
         """Sets the comments for the revision."""
@@ -425,7 +435,7 @@ class RevisionManager(object):
             revision__manager_slug = self._manager_slug,
         ).select_related("revision")
         
-    def save_revision(self, objects, ignore_duplicates=False, user=None, comment="", meta=(), db=None):
+    def save_revision(self, objects, ignore_duplicates=False, user=None, role=None, comment="", meta=(), db=None):
         """Saves a new revision."""
         # Get the db alias.
         db = db or DEFAULT_DB_ALIAS
@@ -472,6 +482,8 @@ class RevisionManager(object):
                     instances = ordered_objects,
                     revision = revision,
                     versions = new_versions,
+                    user = user,
+                    role = role,
                 )
                 # Save the revision.
                 with transaction.atomic(using=db):
@@ -488,6 +500,8 @@ class RevisionManager(object):
                     instances = ordered_objects,
                     revision = revision,
                     versions = new_versions,
+                    user = user,
+                    role = role,
                 )
                 # Return the revision.
                 return revision

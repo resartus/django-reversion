@@ -6,6 +6,8 @@ from django.core.exceptions import ImproperlyConfigured
 
 from reversion.revisions import revision_context_manager
 
+from accounts import ROLE_ID_KEY, ROLE_TYPE_KEY
+
 
 REVISION_MIDDLEWARE_FLAG = "reversion.revision_middleware_active"
 
@@ -34,6 +36,11 @@ class RevisionMiddleware(object):
                 and hasattr(request, "user") and request.user.is_authenticated() \
                 and revision_context_manager.is_active():
             revision_context_manager.set_user(request.user)
+            role = {
+                'type': request.session[ROLE_TYPE_KEY],
+                'id': request.session[ROLE_ID_KEY]
+            }
+            revision_context_manager.set_role(role)
         self._close_revision(request)
         return response
         
