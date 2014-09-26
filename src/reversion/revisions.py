@@ -129,6 +129,7 @@ class RevisionContextManager(local):
         """Puts the revision manager back into its default state."""
         self._objects = {}
         self._user = None
+        self._role = None
         self._comment = ""
         self._stack = []
         self._is_invalid = False
